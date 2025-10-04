@@ -1,0 +1,15 @@
+{
+  "name": "expense-tracker",
+  "version": "1.0.0",
+  "description": "Ultra-fast expense tracker for hackathon",
+  "scripts": {
+    "install-all": "cd server && npm install && cd ../client && npm install",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
