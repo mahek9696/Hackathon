@@ -116,7 +116,7 @@ const AdminPanel = ({ user }) => {
   return (
     <div className="admin-panel">
       <div className="admin-header">
-        <h1>🛠️ Admin Panel</h1>
+        <h1>Admin Panel</h1>
         <p>Manage users and system settings</p>
       </div>
 
@@ -126,13 +126,13 @@ const AdminPanel = ({ user }) => {
           className={`tab ${activeTab === "overview" ? "active" : ""}`}
           onClick={() => setActiveTab("overview")}
         >
-          📊 Overview
+          Overview
         </button>
         <button
           className={`tab ${activeTab === "users" ? "active" : ""}`}
           onClick={() => setActiveTab("users")}
         >
-          👥 Users
+          Users
         </button>
       </div>
 

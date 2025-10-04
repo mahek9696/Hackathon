@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import "./styles/global.css";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import CompanyRegistration from "./components/CompanyRegistration";

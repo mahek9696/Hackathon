@@ -127,13 +127,13 @@ const ExpenseTrackerV2 = ({ user }) => {
   const getStatusIcon = (status) => {
     switch (status) {
       case "approved":
-        return "✅";
+        return "✓";
       case "rejected":
-        return "❌";
+        return "✗";
       case "pending":
         return "⏳";
       default:
-        return "📋";
+        return "...";
     }
   };
 
@@ -160,7 +160,7 @@ const ExpenseTrackerV2 = ({ user }) => {
     <div className="expense-tracker">
       <div className="tracker-header">
         <div className="header-content">
-          <h2>💰 My Expenses</h2>
+          <h2>My Expenses</h2>
           <p>Track and manage your expense submissions</p>
         </div>
         <button
@@ -306,7 +306,7 @@ const ExpenseTrackerV2 = ({ user }) => {
       <div className="expenses-list">
         {myExpenses.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">📋</div>
+            <div className="empty-icon">No Data</div>
             <h3>No expenses yet</h3>
             <p>Submit your first expense to get started!</p>
           </div>
@@ -368,7 +368,7 @@ const ExpenseTrackerV2 = ({ user }) => {
                         }`}
                       >
                         <div className="step-indicator">
-                          {step.status === "approved" ? "✅" : index + 1}
+                          {step.status === "approved" ? "✓" : index + 1}
                         </div>
                         <div className="step-details">
                           <div className="step-title">

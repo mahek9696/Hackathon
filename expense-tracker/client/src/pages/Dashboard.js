@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import ExpenseCharts from "../components/ExpenseCharts";
 import BudgetTracker from "../components/BudgetTracker";
-import AdvancedAnalytics from "../components/AdvancedAnalytics";
-import SmartFeatures from "../components/SmartFeatures";
-import FinancialIntelligence from "../components/FinancialIntelligence";
 import AdminPanel from "../components/AdminPanel";
 import UserManagement from "../components/UserManagement";
 import ApprovalDashboard from "../components/ApprovalDashboard";
 import ExpenseTrackerV2 from "../components/ExpenseTrackerV2";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import { exportToCSV, exportToJSON } from "../utils/exportUtils";
 
 const Dashboard = ({
@@ -56,221 +55,272 @@ const Dashboard = ({
     setCategory("Food");
   };
 
+  // Listen for custom tab change events from admin panel
+  React.useEffect(() => {
+    const handleTabChange = (event) => {
+      setActiveTab(event.detail.tab);
+    };
+
+    window.addEventListener("dashboard-tab-change", handleTabChange);
+    return () => {
+      window.removeEventListener("dashboard-tab-change", handleTabChange);
+    };
+  }, []);
+
   return (
-    <div className="dashboard">
-      <header className="header">
-        <h1>💰 Expense Tracker</h1>
-        <div className="header-actions">
-          <div className="export-buttons">
-            <button
-              onClick={() => exportToCSV(expenses)}
-              className="btn btn--small btn--outline"
-              disabled={expenses.length === 0}
-            >
-              📊 Export CSV
-            </button>
-            <button
-              onClick={() => exportToJSON(expenses)}
-              className="btn btn--small btn--outline"
-              disabled={expenses.length === 0}
-            >
-              📋 Export JSON
-            </button>
-          </div>
-          <div className="user-info">
-            <span>Welcome, {user.name}!</span>
-            <button onClick={onLogout} className="logout-btn">
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
+    <div id="root">
+      <Header user={user} onLogout={onLogout} />
 
-      <div className="dashboard-content">
-        {/* Navigation Tabs */}
-        <div className="dashboard-tabs">
-          <button
-            className={`tab ${activeTab === "expenses" ? "active" : ""}`}
-            onClick={() => setActiveTab("expenses")}
-          >
-            💰 My Expenses
-          </button>
-          {(user?.role === "manager" || user?.role === "admin") && (
+      <main className="main-content">
+        <div className="container">
+          {/* Navigation Tabs */}
+          <div className="nav-tabs">
             <button
-              className={`tab ${activeTab === "approvals" ? "active" : ""}`}
-              onClick={() => setActiveTab("approvals")}
+              className={`nav-tab ${activeTab === "expenses" ? "active" : ""}`}
+              onClick={() => setActiveTab("expenses")}
             >
-              ✅ Approvals
+              My Expenses
             </button>
-          )}
-          <button
-            className={`tab ${activeTab === "overview" ? "active" : ""}`}
-            onClick={() => setActiveTab("overview")}
-          >
-            📊 Overview
-          </button>
-          <button
-            className={`tab ${activeTab === "analytics" ? "active" : ""}`}
-            onClick={() => setActiveTab("analytics")}
-          >
-            📈 Advanced Analytics
-          </button>
-          <button
-            className={`tab ${activeTab === "smart" ? "active" : ""}`}
-            onClick={() => setActiveTab("smart")}
-          >
-            🤖 Smart Features
-          </button>
-          <button
-            className={`tab ${activeTab === "intelligence" ? "active" : ""}`}
-            onClick={() => setActiveTab("intelligence")}
-          >
-            💡 Financial Intelligence
-          </button>
-          {user?.role === "admin" && (
-            <>
+            {(user?.role === "manager" || user?.role === "admin") && (
               <button
-                className={`tab ${activeTab === "admin" ? "active" : ""}`}
-                onClick={() => setActiveTab("admin")}
+                className={`nav-tab ${
+                  activeTab === "approvals" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("approvals")}
               >
-                🛠️ Admin Panel
+                Approvals
               </button>
-              <button
-                className={`tab ${activeTab === "users" ? "active" : ""}`}
-                onClick={() => setActiveTab("users")}
-              >
-                👥 User Management
-              </button>
-            </>
-          )}
-        </div>
-
-        {/* Tab Content */}
-        {activeTab === "expenses" && (
-          <div className="tab-content">
-            <ExpenseTrackerV2 user={user} />
-          </div>
-        )}
-
-        {activeTab === "approvals" &&
-          (user?.role === "manager" || user?.role === "admin") && (
-            <div className="tab-content">
-              <ApprovalDashboard user={user} />
-            </div>
-          )}
-
-        {activeTab === "overview" && (
-          <div className="tab-content">
-            <div className="total-section">
-              <h2>Total Expenses: ${total.toFixed(2)}</h2>
-            </div>
-
-            <div className="add-expense-section">
-              <h3>Add New Expense</h3>
-              <form onSubmit={handleSubmit} className="expense-form">
-                <input
-                  type="number"
-                  step="0.01"
-                  placeholder="Amount"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+            )}
+            <button
+              className={`nav-tab ${activeTab === "overview" ? "active" : ""}`}
+              onClick={() => setActiveTab("overview")}
+            >
+              Overview
+            </button>
+            {user?.role === "admin" && (
+              <>
+                <button
+                  className={`nav-tab ${activeTab === "admin" ? "active" : ""}`}
+                  onClick={() => setActiveTab("admin")}
                 >
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-                <button type="submit">Add Expense</button>
-              </form>
+                  Admin Panel
+                </button>
+                <button
+                  className={`nav-tab ${activeTab === "users" ? "active" : ""}`}
+                  onClick={() => setActiveTab("users")}
+                >
+                  User Management
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Tab Content */}
+          {activeTab === "expenses" && (
+            <div className="tab-content">
+              <ExpenseTrackerV2 user={user} />
             </div>
+          )}
 
-            {/* Basic Analytics Charts */}
-            <ExpenseCharts expenses={expenses} />
+          {activeTab === "approvals" &&
+            (user?.role === "manager" || user?.role === "admin") && (
+              <div className="tab-content">
+                <ApprovalDashboard user={user} />
+              </div>
+            )}
 
-            {/* Budget Tracker */}
-            <BudgetTracker expenses={expenses} />
+          {activeTab === "overview" && (
+            <div className="tab-content">
+              <div
+                className="grid"
+                style={{
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "var(--space-lg)",
+                  marginBottom: "var(--space-lg)",
+                }}
+              >
+                <div className="card">
+                  <div className="card-header">
+                    <h3 className="font-semibold">Total Expenses</h3>
+                  </div>
+                  <div className="card-body">
+                    <div className="text-3xl font-bold text-primary">
+                      ₹{total.toFixed(2)}
+                    </div>
+                    <p className="text-muted text-sm mt-sm">
+                      Current month total
+                    </p>
+                  </div>
+                </div>
 
-            <div className="expenses-section">
-              <h3>Recent Expenses ({expenses.length})</h3>
-              <div className="expenses-list">
-                {expenses.length === 0 ? (
-                  <p>No expenses yet. Add your first expense above!</p>
-                ) : (
-                  expenses.map((expense) => (
-                    <div key={expense._id} className="expense-item">
-                      <div className="expense-info">
-                        <span className="expense-amount">
-                          ${expense.amount.toFixed(2)}
-                        </span>
-                        <span className="expense-description">
-                          {expense.description}
-                        </span>
-                        <span className="expense-category">
-                          {expense.category}
-                        </span>
-                        <span className="expense-date">
-                          {new Date(expense.date).toLocaleDateString()}
-                        </span>
-                      </div>
+                <div className="card">
+                  <div className="card-header">
+                    <h3 className="font-semibold">Export Data</h3>
+                  </div>
+                  <div className="card-body">
+                    <div className="flex gap-sm">
                       <button
-                        onClick={() =>
-                          onDeleteExpense(expense._id, expense.amount)
-                        }
-                        className="delete-btn"
+                        onClick={() => exportToCSV(expenses)}
+                        className="btn btn-outline btn-sm"
+                        disabled={expenses.length === 0}
                       >
-                        ❌
+                        Export CSV
+                      </button>
+                      <button
+                        onClick={() => exportToJSON(expenses)}
+                        className="btn btn-outline btn-sm"
+                        disabled={expenses.length === 0}
+                      >
+                        Export JSON
                       </button>
                     </div>
-                  ))
-                )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="card mb-lg">
+                <div className="card-header">
+                  <h3 className="font-semibold">Add New Expense</h3>
+                </div>
+                <div className="card-body">
+                  <form
+                    onSubmit={handleSubmit}
+                    className="grid"
+                    style={{
+                      gridTemplateColumns: "1fr 1fr 1fr auto",
+                      gap: "var(--space-md)",
+                      alignItems: "end",
+                    }}
+                  >
+                    <div className="form-group">
+                      <label className="form-label">Amount (₹)</label>
+                      <input
+                        type="number"
+                        step="0.01"
+                        placeholder="0.00"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        required
+                        className="form-input"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Description</label>
+                      <input
+                        type="text"
+                        placeholder="What did you spend on?"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required
+                        className="form-input"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Category</label>
+                      <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="form-select"
+                      >
+                        {categories.map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <button type="submit" className="btn btn-primary">
+                      Add Expense
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              {/* Charts and Analytics */}
+              <ExpenseCharts expenses={expenses} />
+              <BudgetTracker expenses={expenses} />
+
+              <div className="card mt-lg">
+                <div className="card-header">
+                  <h3 className="font-semibold">
+                    Recent Expenses ({expenses.length})
+                  </h3>
+                </div>
+                <div className="card-body">
+                  {expenses.length === 0 ? (
+                    <div className="text-center py-lg">
+                      <p className="text-muted">
+                        No expenses yet. Add your first expense above!
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="table-container">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>Amount</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {expenses.map((expense) => (
+                            <tr key={expense._id}>
+                              <td className="font-semibold">
+                                ₹{expense.amount.toFixed(2)}
+                              </td>
+                              <td>{expense.description}</td>
+                              <td>
+                                <span className="badge badge-info">
+                                  {expense.category}
+                                </span>
+                              </td>
+                              <td className="text-sm text-muted">
+                                {new Date(expense.date).toLocaleDateString()}
+                              </td>
+                              <td>
+                                <button
+                                  onClick={() =>
+                                    onDeleteExpense(expense._id, expense.amount)
+                                  }
+                                  className="btn btn-sm"
+                                  style={{
+                                    backgroundColor: "var(--error)",
+                                    color: "white",
+                                    padding: "4px 8px",
+                                  }}
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === "analytics" && (
-          <div className="tab-content">
-            <AdvancedAnalytics expenses={expenses} />
-          </div>
-        )}
+          {activeTab === "admin" && user?.role === "admin" && (
+            <div className="tab-content">
+              <AdminPanel user={user} />
+            </div>
+          )}
 
-        {activeTab === "smart" && (
-          <div className="tab-content">
-            <SmartFeatures expenses={expenses} onAddExpense={onAddExpense} />
-          </div>
-        )}
+          {activeTab === "users" && user?.role === "admin" && (
+            <div className="tab-content">
+              <UserManagement user={user} />
+            </div>
+          )}
+        </div>
+      </main>
 
-        {activeTab === "intelligence" && (
-          <div className="tab-content">
-            <FinancialIntelligence expenses={expenses} />
-          </div>
-        )}
-
-        {activeTab === "admin" && user?.role === "admin" && (
-          <div className="tab-content">
-            <AdminPanel user={user} />
-          </div>
-        )}
-
-        {activeTab === "users" && user?.role === "admin" && (
-          <div className="tab-content">
-            <UserManagement user={user} />
-          </div>
-        )}
-      </div>
+      <Footer />
     </div>
   );
 };
