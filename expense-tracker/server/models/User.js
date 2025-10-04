@@ -40,8 +40,41 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "manager", "admin"],
-      default: "user",
+      enum: ["employee", "manager", "admin"],
+      default: "employee",
+    },
+    company: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      required: function () {
+        return this.role !== "admin" || this.isNew === false;
+      },
+    },
+    department: {
+      type: String,
+      trim: true,
+      maxlength: [50, "Department cannot exceed 50 characters"],
+    },
+    employeeId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      trim: true,
+    },
+    manager: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+    directReports: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    approvalLimit: {
+      type: Number,
+      default: 0, // Amount they can approve
     },
     permissions: {
       type: [String],

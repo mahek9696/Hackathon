@@ -7,6 +7,8 @@ const app = express();
 
 // Import routes
 const authRoutes = require("./routes/auth");
+const authV2Routes = require("./routes/authV2");
+const expensesV2Routes = require("./routes/expensesV2");
 const adminRoutes = require("./routes/admin");
 const { auth } = require("./middleware/auth");
 
@@ -16,10 +18,15 @@ app.use(express.json());
 
 // Import models
 const User = require("./models/User");
+const Company = require("./models/Company");
 const Expense = require("./models/Expense");
+const ExpenseV2 = require("./models/ExpenseV2");
+const ApprovalRule = require("./models/ApprovalRule");
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/auth/v2", authV2Routes);
+app.use("/api/expenses/v2", expensesV2Routes);
 app.use("/api/admin", adminRoutes);
 
 // Health check endpoint

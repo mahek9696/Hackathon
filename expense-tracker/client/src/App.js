@@ -3,6 +3,7 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import CompanyRegistration from "./components/CompanyRegistration";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   const [expenses, setExpenses] = useState([]);
   const [total, setTotal] = useState(0);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
+  const [isCompanyRegisterMode, setIsCompanyRegisterMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Check for existing authentication on app start
@@ -198,6 +200,27 @@ function App() {
     toast.success("Logged out successfully");
   };
 
+  // Handle company registration
+  const handleCompanyRegister = async (companyData) => {
+    try {
+      const response = await axios.post(
+        "/api/auth/v2/register-company",
+        companyData
+      );
+
+      if (response.data.success) {
+        handleLogin(response.data.user, response.data.token);
+        toast.success("Company registered successfully! Welcome!");
+        setIsCompanyRegisterMode(false);
+      }
+    } catch (error) {
+      console.error("Error registering company:", error);
+      const errorMessage =
+        error.response?.data?.message || "Registration failed";
+      toast.error(errorMessage);
+    }
+  };
+
   useEffect(() => {
     fetchExpenses();
   }, [user, authToken]);
@@ -278,15 +301,22 @@ function App() {
         }}
       />
 
-      {isRegisterMode ? (
+      {isCompanyRegisterMode ? (
+        <CompanyRegistration
+          onRegister={handleCompanyRegister}
+          onSwitchToLogin={() => setIsCompanyRegisterMode(false)}
+        />
+      ) : isRegisterMode ? (
         <Register
           onRegister={handleRegister}
           onSwitchToLogin={() => setIsRegisterMode(false)}
+          onSwitchToCompanyRegister={() => setIsCompanyRegisterMode(true)}
         />
       ) : (
         <Login
           onLogin={handleLoginSubmit}
           onSwitchToRegister={() => setIsRegisterMode(true)}
+          onSwitchToCompanyRegister={() => setIsCompanyRegisterMode(true)}
         />
       )}
     </div>

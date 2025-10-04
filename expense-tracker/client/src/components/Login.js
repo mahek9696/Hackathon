@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Login = ({ onLogin, onSwitchToRegister }) => {
+const Login = ({ onLogin, onSwitchToRegister, onSwitchToCompanyRegister }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -251,6 +251,17 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
               disabled={isLoading}
             >
               Create Account
+            </button>
+          </p>
+          <p>
+            Want to start a new company?{" "}
+            <button
+              type="button"
+              className="link-button"
+              onClick={onSwitchToCompanyRegister}
+              disabled={isLoading}
+            >
+              Register Company
             </button>
           </p>
         </div>

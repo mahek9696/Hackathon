@@ -5,6 +5,9 @@ import AdvancedAnalytics from "../components/AdvancedAnalytics";
 import SmartFeatures from "../components/SmartFeatures";
 import FinancialIntelligence from "../components/FinancialIntelligence";
 import AdminPanel from "../components/AdminPanel";
+import UserManagement from "../components/UserManagement";
+import ApprovalDashboard from "../components/ApprovalDashboard";
+import ExpenseTrackerV2 from "../components/ExpenseTrackerV2";
 import { exportToCSV, exportToJSON } from "../utils/exportUtils";
 
 const Dashboard = ({
@@ -18,7 +21,7 @@ const Dashboard = ({
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Food");
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("expenses");
 
   const categories = [
     "Food",
@@ -87,6 +90,20 @@ const Dashboard = ({
         {/* Navigation Tabs */}
         <div className="dashboard-tabs">
           <button
+            className={`tab ${activeTab === "expenses" ? "active" : ""}`}
+            onClick={() => setActiveTab("expenses")}
+          >
+            💰 My Expenses
+          </button>
+          {(user?.role === "manager" || user?.role === "admin") && (
+            <button
+              className={`tab ${activeTab === "approvals" ? "active" : ""}`}
+              onClick={() => setActiveTab("approvals")}
+            >
+              ✅ Approvals
+            </button>
+          )}
+          <button
             className={`tab ${activeTab === "overview" ? "active" : ""}`}
             onClick={() => setActiveTab("overview")}
           >
@@ -111,16 +128,37 @@ const Dashboard = ({
             💡 Financial Intelligence
           </button>
           {user?.role === "admin" && (
-            <button
-              className={`tab ${activeTab === "admin" ? "active" : ""}`}
-              onClick={() => setActiveTab("admin")}
-            >
-              🛠️ Admin Panel
-            </button>
+            <>
+              <button
+                className={`tab ${activeTab === "admin" ? "active" : ""}`}
+                onClick={() => setActiveTab("admin")}
+              >
+                🛠️ Admin Panel
+              </button>
+              <button
+                className={`tab ${activeTab === "users" ? "active" : ""}`}
+                onClick={() => setActiveTab("users")}
+              >
+                👥 User Management
+              </button>
+            </>
           )}
         </div>
 
         {/* Tab Content */}
+        {activeTab === "expenses" && (
+          <div className="tab-content">
+            <ExpenseTrackerV2 user={user} />
+          </div>
+        )}
+
+        {activeTab === "approvals" &&
+          (user?.role === "manager" || user?.role === "admin") && (
+            <div className="tab-content">
+              <ApprovalDashboard user={user} />
+            </div>
+          )}
+
         {activeTab === "overview" && (
           <div className="tab-content">
             <div className="total-section">
@@ -224,6 +262,12 @@ const Dashboard = ({
         {activeTab === "admin" && user?.role === "admin" && (
           <div className="tab-content">
             <AdminPanel user={user} />
+          </div>
+        )}
+
+        {activeTab === "users" && user?.role === "admin" && (
+          <div className="tab-content">
+            <UserManagement user={user} />
           </div>
         )}
       </div>

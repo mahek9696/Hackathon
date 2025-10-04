@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 
-const Register = ({ onRegister, onSwitchToLogin }) => {
+const Register = ({
+  onRegister,
+  onSwitchToLogin,
+  onSwitchToCompanyRegister,
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -288,6 +292,17 @@ const Register = ({ onRegister, onSwitchToLogin }) => {
               disabled={isLoading}
             >
               Sign In
+            </button>
+          </p>
+          <p>
+            Want to start a new company?{" "}
+            <button
+              type="button"
+              className="link-button"
+              onClick={onSwitchToCompanyRegister}
+              disabled={isLoading}
+            >
+              Register Company
             </button>
           </p>
         </div>
