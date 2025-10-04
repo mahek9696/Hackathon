@@ -151,204 +151,247 @@ const CompanyRegistration = ({ onRegister, onSwitchToLogin }) => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card company-registration">
-        <div className="auth-header">
-          <h1>🏢 Create Your Company</h1>
-          <p>Set up your expense management system</p>
-          <div className="step-indicator">
-            <div className={`step ${currentStep >= 1 ? "active" : ""}`}>1</div>
-            <div className="step-line"></div>
-            <div className={`step ${currentStep >= 2 ? "active" : ""}`}>2</div>
+    <div className="min-h-screen bg-light flex items-center justify-center p-md">
+      <div className="w-full max-w-lg">
+        {/* Header */}
+        <div className="text-center mb-lg">
+          <div className="flex items-center justify-center gap-sm mb-md">
+            <div className="logo-icon">
+              <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="8" fill="var(--primary)" />
+                <path
+                  d="M8 12h16v2H8v-2zm0 4h16v2H8v-2zm0 4h12v2H8v-2z"
+                  fill="white"
+                />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-primary">
+                Expense Management System
+              </h1>
+            </div>
+          </div>
+          <p className="text-muted">Create your company account</p>
+
+          {/* Step Indicator */}
+          <div className="flex items-center justify-center gap-sm mt-md">
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                currentStep >= 1
+                  ? "bg-primary text-white"
+                  : "bg-gray-200 text-muted"
+              }`}
+            >
+              1
+            </div>
+            <div className="w-8 h-px bg-gray-200"></div>
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                currentStep >= 2
+                  ? "bg-primary text-white"
+                  : "bg-gray-200 text-muted"
+              }`}
+            >
+              2
+            </div>
           </div>
         </div>
 
-        {errors.general && (
-          <div className="alert alert-error">{errors.general}</div>
-        )}
+        {/* Registration Card */}
+        <div className="card">
+          <div className="card-body">
+            {errors.general && (
+              <div className="alert alert-error mb-md">{errors.general}</div>
+            )}
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          {/* Step 1: Company Information */}
-          {currentStep === 1 && (
-            <div className="step-content">
-              <h3>Company Information</h3>
+            <form onSubmit={handleSubmit} className="space-y-md">
+              {/* Step 1: Company Information */}
+              {currentStep === 1 && (
+                <div className="step-content">
+                  <h3>Company Information</h3>
 
-              <div className="form-group">
-                <label htmlFor="companyName">Company Name *</label>
-                <input
-                  type="text"
-                  id="companyName"
-                  name="companyName"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                  className={errors.companyName ? "error" : ""}
-                  placeholder="Enter your company name"
-                  disabled={isLoading}
-                />
-                {errors.companyName && (
-                  <div className="error-message">{errors.companyName}</div>
-                )}
-              </div>
+                  <div className="form-group">
+                    <label htmlFor="companyName">Company Name *</label>
+                    <input
+                      type="text"
+                      id="companyName"
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleChange}
+                      className={errors.companyName ? "error" : ""}
+                      placeholder="Enter your company name"
+                      disabled={isLoading}
+                    />
+                    {errors.companyName && (
+                      <div className="error-message">{errors.companyName}</div>
+                    )}
+                  </div>
 
-              <div className="form-group">
-                <label htmlFor="country">Country *</label>
-                <select
-                  id="country"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  className={errors.country ? "error" : ""}
-                  disabled={isLoading}
-                >
-                  <option value="">Select your country</option>
-                  {countries.map((country) => (
-                    <option key={country} value={country}>
-                      {country}
-                    </option>
-                  ))}
-                </select>
-                {errors.country && (
-                  <div className="error-message">{errors.country}</div>
-                )}
-              </div>
+                  <div className="form-group">
+                    <label htmlFor="country">Country *</label>
+                    <select
+                      id="country"
+                      name="country"
+                      value={formData.country}
+                      onChange={handleChange}
+                      className={errors.country ? "error" : ""}
+                      disabled={isLoading}
+                    >
+                      <option value="">Select your country</option>
+                      {countries.map((country) => (
+                        <option key={country} value={country}>
+                          {country}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.country && (
+                      <div className="error-message">{errors.country}</div>
+                    )}
+                  </div>
 
-              <div className="form-group">
-                <label htmlFor="currency">Default Currency *</label>
-                <select
-                  id="currency"
-                  name="currency"
-                  value={formData.currency}
-                  onChange={handleChange}
-                  className={errors.currency ? "error" : ""}
-                  disabled={isLoading}
-                >
-                  {currencies.map((currency) => (
-                    <option key={currency.code} value={currency.code}>
-                      {currency.name}
-                    </option>
-                  ))}
-                </select>
-                {errors.currency && (
-                  <div className="error-message">{errors.currency}</div>
-                )}
-              </div>
+                  <div className="form-group">
+                    <label htmlFor="currency">Default Currency *</label>
+                    <select
+                      id="currency"
+                      name="currency"
+                      value={formData.currency}
+                      onChange={handleChange}
+                      className={errors.currency ? "error" : ""}
+                      disabled={isLoading}
+                    >
+                      {currencies.map((currency) => (
+                        <option key={currency.code} value={currency.code}>
+                          {currency.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.currency && (
+                      <div className="error-message">{errors.currency}</div>
+                    )}
+                  </div>
 
-              <button
-                type="button"
-                className="auth-button"
-                onClick={handleNext}
-                disabled={isLoading}
-              >
-                Next: Admin Account →
-              </button>
-            </div>
-          )}
+                  <button
+                    type="button"
+                    className="auth-button"
+                    onClick={handleNext}
+                    disabled={isLoading}
+                  >
+                    Next: Admin Account →
+                  </button>
+                </div>
+              )}
 
-          {/* Step 2: Admin Account */}
-          {currentStep === 2 && (
-            <div className="step-content">
-              <h3>Admin Account</h3>
+              {/* Step 2: Admin Account */}
+              {currentStep === 2 && (
+                <div className="step-content">
+                  <h3>Admin Account</h3>
 
-              <div className="form-group">
-                <label htmlFor="adminName">Admin Name *</label>
-                <input
-                  type="text"
-                  id="adminName"
-                  name="adminName"
-                  value={formData.adminName}
-                  onChange={handleChange}
-                  className={errors.adminName ? "error" : ""}
-                  placeholder="Enter admin name"
-                  disabled={isLoading}
-                />
-                {errors.adminName && (
-                  <div className="error-message">{errors.adminName}</div>
-                )}
-              </div>
+                  <div className="form-group">
+                    <label htmlFor="adminName">Admin Name *</label>
+                    <input
+                      type="text"
+                      id="adminName"
+                      name="adminName"
+                      value={formData.adminName}
+                      onChange={handleChange}
+                      className={errors.adminName ? "error" : ""}
+                      placeholder="Enter admin name"
+                      disabled={isLoading}
+                    />
+                    {errors.adminName && (
+                      <div className="error-message">{errors.adminName}</div>
+                    )}
+                  </div>
 
-              <div className="form-group">
-                <label htmlFor="adminEmail">Admin Email *</label>
-                <input
-                  type="email"
-                  id="adminEmail"
-                  name="adminEmail"
-                  value={formData.adminEmail}
-                  onChange={handleChange}
-                  className={errors.adminEmail ? "error" : ""}
-                  placeholder="Enter admin email"
-                  disabled={isLoading}
-                />
-                {errors.adminEmail && (
-                  <div className="error-message">{errors.adminEmail}</div>
-                )}
-              </div>
+                  <div className="form-group">
+                    <label htmlFor="adminEmail">Admin Email *</label>
+                    <input
+                      type="email"
+                      id="adminEmail"
+                      name="adminEmail"
+                      value={formData.adminEmail}
+                      onChange={handleChange}
+                      className={errors.adminEmail ? "error" : ""}
+                      placeholder="Enter admin email"
+                      disabled={isLoading}
+                    />
+                    {errors.adminEmail && (
+                      <div className="error-message">{errors.adminEmail}</div>
+                    )}
+                  </div>
 
-              <div className="form-group">
-                <label htmlFor="password">Password *</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={errors.password ? "error" : ""}
-                  placeholder="Create a strong password"
-                  disabled={isLoading}
-                />
-                {errors.password && (
-                  <div className="error-message">{errors.password}</div>
-                )}
-              </div>
+                  <div className="form-group">
+                    <label htmlFor="password">Password *</label>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className={errors.password ? "error" : ""}
+                      placeholder="Create a strong password"
+                      disabled={isLoading}
+                    />
+                    {errors.password && (
+                      <div className="error-message">{errors.password}</div>
+                    )}
+                  </div>
 
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password *</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={errors.confirmPassword ? "error" : ""}
-                  placeholder="Confirm your password"
-                  disabled={isLoading}
-                />
-                {errors.confirmPassword && (
-                  <div className="error-message">{errors.confirmPassword}</div>
-                )}
-              </div>
+                  <div className="form-group">
+                    <label htmlFor="confirmPassword">Confirm Password *</label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className={errors.confirmPassword ? "error" : ""}
+                      placeholder="Confirm your password"
+                      disabled={isLoading}
+                    />
+                    {errors.confirmPassword && (
+                      <div className="error-message">
+                        {errors.confirmPassword}
+                      </div>
+                    )}
+                  </div>
 
-              <div className="form-actions">
-                <button
-                  type="button"
-                  className="auth-button secondary"
-                  onClick={handleBack}
-                  disabled={isLoading}
-                >
-                  ← Back
-                </button>
-                <button
-                  type="submit"
-                  className="auth-button"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <span className="loading-spinner">Creating Company...</span>
-                  ) : (
-                    "Create Company & Admin Account"
-                  )}
-                </button>
-              </div>
-            </div>
-          )}
-        </form>
+                  <div className="form-actions">
+                    <button
+                      type="button"
+                      className="auth-button secondary"
+                      onClick={handleBack}
+                      disabled={isLoading}
+                    >
+                      ← Back
+                    </button>
+                    <button
+                      type="submit"
+                      className="auth-button"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <span className="loading-spinner">
+                          Creating Company...
+                        </span>
+                      ) : (
+                        "Create Company & Admin Account"
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
+        </div>
 
-        {/* Switch to Login */}
-        <div className="auth-footer">
-          <p>
+        {/* Footer Links */}
+        <div className="text-center mt-lg space-y-sm">
+          <p className="text-sm text-muted">
             Already have a company account?{" "}
             <button
               type="button"
-              className="link-button"
+              className="text-primary hover:underline font-medium"
               onClick={onSwitchToLogin}
               disabled={isLoading}
             >
@@ -358,16 +401,36 @@ const CompanyRegistration = ({ onRegister, onSwitchToLogin }) => {
         </div>
 
         {/* Features Preview */}
-        <div className="features-preview">
-          <h4>✨ Enterprise Features:</h4>
-          <ul>
-            <li>🏢 Multi-level Approval Workflows</li>
-            <li>👥 Employee & Manager Management</li>
-            <li>💱 Multi-currency Support</li>
-            <li>📊 Advanced Analytics & Reports</li>
-            <li>🔒 Role-based Access Control</li>
-            <li>⚡ Conditional Approval Rules</li>
-          </ul>
+        <div className="card mt-lg">
+          <div className="card-body">
+            <h4 className="font-semibold mb-sm">Enterprise Features:</h4>
+            <ul className="text-sm text-muted space-y-xs">
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Multi-level Approval Workflows
+              </li>
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Employee & Manager Management
+              </li>
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Multi-currency Support
+              </li>
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Advanced Analytics & Reports
+              </li>
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Role-based Access Control
+              </li>
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Conditional Approval Rules
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

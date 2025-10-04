@@ -231,7 +231,7 @@ function App() {
     return (
       <div className="loading-container">
         <div className="loading-spinner">
-          <h2>💰 Expense Tracker</h2>
+          <h2>Expense Tracker</h2>
           <p>Loading...</p>
         </div>
       </div>

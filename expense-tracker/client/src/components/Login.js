@@ -144,120 +144,154 @@ const Login = ({ onLogin, onSwitchToRegister, onSwitchToCompanyRegister }) => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <h1>💰 Expense Tracker</h1>
-          <p>Welcome back! Please sign in to your account.</p>
+    <div className="min-h-screen bg-light flex items-center justify-center p-md">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-lg">
+          <div className="flex items-center justify-center gap-sm mb-md">
+            <div className="logo-icon">
+              <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="8" fill="var(--primary)" />
+                <path
+                  d="M8 12h16v2H8v-2zm0 4h16v2H8v-2zm0 4h12v2H8v-2z"
+                  fill="white"
+                />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-primary">
+                Expense Management System
+              </h1>
+            </div>
+          </div>
+          <p className="text-muted">Sign in to manage your expenses</p>
         </div>
 
-        {errors.general && (
-          <div className="alert alert-error">{errors.general}</div>
-        )}
-
-        <form onSubmit={handleSubmit} className="auth-form">
-          {/* Email Field */}
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={errors.email ? "error" : ""}
-              placeholder="Enter your email"
-              disabled={isLoading}
-              autoComplete="email"
-            />
-            {errors.email && (
-              <div className="error-message">{errors.email}</div>
+        {/* Login Card */}
+        <div className="card">
+          <div className="card-body">
+            {errors.general && (
+              <div className="alert alert-error mb-md">{errors.general}</div>
             )}
-          </div>
 
-          {/* Password Field */}
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <div className="password-input-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? "error" : ""}
-                placeholder="Enter your password"
-                disabled={isLoading}
-                autoComplete="current-password"
-              />
+            <form onSubmit={handleSubmit} className="space-y-md">
+              {/* Email Field */}
+              <div className="form-group">
+                <label htmlFor="email" className="form-label">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`form-input ${errors.email ? "error" : ""}`}
+                  placeholder="Enter your email"
+                  disabled={isLoading}
+                  autoComplete="email"
+                />
+                {errors.email && (
+                  <div className="text-error text-sm mt-xs">{errors.email}</div>
+                )}
+              </div>
+
+              {/* Password Field */}
+              <div className="form-group">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={`form-input pr-10 ${
+                      errors.password ? "error" : ""
+                    }`}
+                    placeholder="Enter your password"
+                    disabled={isLoading}
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"
+                    onClick={() => setShowPassword(!showPassword)}
+                    disabled={isLoading}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+                {errors.password && (
+                  <div className="text-error text-sm mt-xs">
+                    {errors.password}
+                  </div>
+                )}
+              </div>
+
+              {/* Remember Me & Forgot Password */}
+              <div className="flex items-center justify-between">
+                <label className="flex items-center gap-xs cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    disabled={isLoading}
+                    className="form-checkbox"
+                  />
+                  <span className="text-sm">Remember me</span>
+                </label>
+                <button
+                  type="button"
+                  className="text-sm text-primary hover:underline"
+                  disabled={isLoading}
+                >
+                  Forgot Password?
+                </button>
+              </div>
+
+              {/* Login Button */}
               <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
+                type="submit"
+                className="btn btn-primary w-full"
                 disabled={isLoading}
               >
-                {showPassword ? "👁️" : "👁️‍🗨️"}
+                {isLoading ? "Signing In..." : "Sign In"}
               </button>
-            </div>
-            {errors.password && (
-              <div className="error-message">{errors.password}</div>
-            )}
-          </div>
 
-          {/* Remember Me & Forgot Password */}
-          <div className="form-options">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
+              {/* Demo Login Button */}
+              <button
+                type="button"
+                className="btn btn-outline w-full"
+                onClick={handleDemoLogin}
                 disabled={isLoading}
-              />
-              Remember me
-            </label>
-            <button type="button" className="link-button" disabled={isLoading}>
-              Forgot Password?
-            </button>
+              >
+                Try Demo Account
+              </button>
+            </form>
           </div>
+        </div>
 
-          {/* Login Button */}
-          <button type="submit" className="auth-button" disabled={isLoading}>
-            {isLoading ? (
-              <span className="loading-spinner">Signing In...</span>
-            ) : (
-              "Sign In"
-            )}
-          </button>
-
-          {/* Demo Login Button */}
-          <button
-            type="button"
-            className="demo-button"
-            onClick={handleDemoLogin}
-            disabled={isLoading}
-          >
-            🚀 Try Demo Account
-          </button>
-        </form>
-
-        {/* Switch to Register */}
-        <div className="auth-footer">
-          <p>
+        {/* Footer Links */}
+        <div className="text-center mt-lg space-y-sm">
+          <p className="text-sm text-muted">
             Don't have an account?{" "}
             <button
               type="button"
-              className="link-button"
+              className="text-primary hover:underline font-medium"
               onClick={onSwitchToRegister}
               disabled={isLoading}
             >
               Create Account
             </button>
           </p>
-          <p>
+          <p className="text-sm text-muted">
             Want to start a new company?{" "}
             <button
               type="button"
-              className="link-button"
+              className="text-primary hover:underline font-medium"
               onClick={onSwitchToCompanyRegister}
               disabled={isLoading}
             >
@@ -267,15 +301,32 @@ const Login = ({ onLogin, onSwitchToRegister, onSwitchToCompanyRegister }) => {
         </div>
 
         {/* Features Preview */}
-        <div className="features-preview">
-          <h4>✨ Features you'll get:</h4>
-          <ul>
-            <li>📊 Advanced Analytics & Charts</li>
-            <li>🤖 AI-Powered Smart Insights</li>
-            <li>💡 Financial Intelligence & Tips</li>
-            <li>💰 Budget Tracking & Alerts</li>
-            <li>📱 Mobile-Responsive Design</li>
-          </ul>
+        <div className="card mt-lg">
+          <div className="card-body">
+            <h4 className="font-semibold mb-sm">Why choose our platform?</h4>
+            <ul className="text-sm text-muted space-y-xs">
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Advanced Analytics & Reports
+              </li>
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Multi-level Approval Workflow
+              </li>
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Budget Tracking & Alerts
+              </li>
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Mobile-Responsive Design
+              </li>
+              <li className="flex items-center gap-xs">
+                <span className="w-1 h-1 bg-primary rounded-full"></span>
+                Secure & Reliable Platform
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

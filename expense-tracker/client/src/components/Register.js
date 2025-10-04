@@ -147,158 +147,208 @@ const Register = ({
   const passwordStrength = getPasswordStrengthLabel();
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <h1>Create Account</h1>
-          <p>Join us to start tracking your expenses</p>
+    <div className="min-h-screen bg-light flex items-center justify-center p-md">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-lg">
+          <div className="flex items-center justify-center gap-sm mb-md">
+            <div className="logo-icon">
+              <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
+                <rect width="32" height="32" rx="8" fill="var(--primary)" />
+                <path
+                  d="M8 12h16v2H8v-2zm0 4h16v2H8v-2zm0 4h12v2H8v-2z"
+                  fill="white"
+                />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-primary">
+                Expense Management System
+              </h1>
+            </div>
+          </div>
+          <p className="text-muted">Create your account to get started</p>
         </div>
 
-        {errors.general && (
-          <div className="alert alert-error">{errors.general}</div>
-        )}
-
-        <form onSubmit={handleSubmit} className="auth-form">
-          {/* Name Field */}
-          <div className="form-group">
-            <label htmlFor="name">Full Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className={errors.name ? "error" : ""}
-              placeholder="Enter your full name"
-              disabled={isLoading}
-            />
-            {errors.name && <div className="error-message">{errors.name}</div>}
-          </div>
-
-          {/* Email Field */}
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={errors.email ? "error" : ""}
-              placeholder="Enter your email address"
-              disabled={isLoading}
-            />
-            {errors.email && (
-              <div className="error-message">{errors.email}</div>
+        {/* Register Card */}
+        <div className="card">
+          <div className="card-body">
+            {errors.general && (
+              <div className="alert alert-error mb-md">{errors.general}</div>
             )}
-          </div>
 
-          {/* Password Field */}
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <div className="password-input-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? "error" : ""}
-                placeholder="Create a strong password"
-                disabled={isLoading}
-              />
+            <form onSubmit={handleSubmit} className="space-y-md">
+              {/* Name Field */}
+              <div className="form-group">
+                <label htmlFor="name" className="form-label">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={`form-input ${errors.name ? "error" : ""}`}
+                  placeholder="Enter your full name"
+                  disabled={isLoading}
+                />
+                {errors.name && (
+                  <div className="text-error text-sm mt-xs">{errors.name}</div>
+                )}
+              </div>
+
+              {/* Email Field */}
+              <div className="form-group">
+                <label htmlFor="email" className="form-label">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`form-input ${errors.email ? "error" : ""}`}
+                  placeholder="Enter your email address"
+                  disabled={isLoading}
+                />
+                {errors.email && (
+                  <div className="text-error text-sm mt-xs">{errors.email}</div>
+                )}
+              </div>
+
+              {/* Password Field */}
+              <div className="form-group">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={`form-input pr-10 ${
+                      errors.password ? "error" : ""
+                    }`}
+                    placeholder="Create a strong password"
+                    disabled={isLoading}
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"
+                    onClick={() => setShowPassword(!showPassword)}
+                    disabled={isLoading}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+
+                {/* Password Strength Indicator */}
+                {formData.password && (
+                  <div className="mt-xs">
+                    <div className="w-full bg-gray-200 rounded-full h-1">
+                      <div
+                        className="h-1 rounded-full transition-all duration-300"
+                        style={{
+                          width: `${(getPasswordStrength() / 5) * 100}%`,
+                          backgroundColor: passwordStrength.color,
+                        }}
+                      ></div>
+                    </div>
+                    <span
+                      className="text-sm mt-xs"
+                      style={{ color: passwordStrength.color }}
+                    >
+                      {passwordStrength.label}
+                    </span>
+                  </div>
+                )}
+
+                {errors.password && (
+                  <div className="text-error text-sm mt-xs">
+                    {errors.password}
+                  </div>
+                )}
+              </div>
+
+              {/* Confirm Password Field */}
+              <div className="form-group">
+                <label htmlFor="confirmPassword" className="form-label">
+                  Confirm Password
+                </label>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`form-input ${
+                    errors.confirmPassword ? "error" : ""
+                  }`}
+                  placeholder="Confirm your password"
+                  disabled={isLoading}
+                />
+                {errors.confirmPassword && (
+                  <div className="text-error text-sm mt-xs">
+                    {errors.confirmPassword}
+                  </div>
+                )}
+              </div>
+
+              {/* Currency Field */}
+              <div className="form-group">
+                <label htmlFor="currency" className="form-label">
+                  Preferred Currency
+                </label>
+                <select
+                  id="currency"
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  className="form-select"
+                  disabled={isLoading}
+                >
+                  {currencies.map((currency) => (
+                    <option key={currency.code} value={currency.code}>
+                      {currency.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Submit Button */}
               <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
+                type="submit"
+                className="btn btn-primary w-full"
                 disabled={isLoading}
               >
-                {showPassword ? "👁️" : "👁️‍🗨️"}
+                {isLoading ? "Creating Account..." : "Create Account"}
               </button>
-            </div>
-            {formData.password && (
-              <div className="password-strength">
-                <div
-                  className="strength-indicator"
-                  style={{
-                    width: `${(getPasswordStrength() / 5) * 100}%`,
-                    backgroundColor: passwordStrength.color,
-                  }}
-                ></div>
-                <span style={{ color: passwordStrength.color }}>
-                  {passwordStrength.label}
-                </span>
-              </div>
-            )}
-            {errors.password && (
-              <div className="error-message">{errors.password}</div>
-            )}
+            </form>
           </div>
+        </div>
 
-          {/* Confirm Password Field */}
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className={errors.confirmPassword ? "error" : ""}
-              placeholder="Confirm your password"
-              disabled={isLoading}
-            />
-            {errors.confirmPassword && (
-              <div className="error-message">{errors.confirmPassword}</div>
-            )}
-          </div>
-
-          {/* Currency Field */}
-          <div className="form-group">
-            <label htmlFor="currency">Preferred Currency</label>
-            <select
-              id="currency"
-              name="currency"
-              value={formData.currency}
-              onChange={handleChange}
-              disabled={isLoading}
-            >
-              {currencies.map((currency) => (
-                <option key={currency.code} value={currency.code}>
-                  {currency.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Submit Button */}
-          <button type="submit" className="auth-button" disabled={isLoading}>
-            {isLoading ? (
-              <span className="loading-spinner">Creating Account...</span>
-            ) : (
-              "Create Account"
-            )}
-          </button>
-        </form>
-
-        {/* Switch to Login */}
-        <div className="auth-footer">
-          <p>
+        {/* Footer Links */}
+        <div className="text-center mt-lg space-y-sm">
+          <p className="text-sm text-muted">
             Already have an account?{" "}
             <button
               type="button"
-              className="link-button"
+              className="text-primary hover:underline font-medium"
               onClick={onSwitchToLogin}
               disabled={isLoading}
             >
               Sign In
             </button>
           </p>
-          <p>
+          <p className="text-sm text-muted">
             Want to start a new company?{" "}
             <button
               type="button"
-              className="link-button"
+              className="text-primary hover:underline font-medium"
               onClick={onSwitchToCompanyRegister}
               disabled={isLoading}
             >
@@ -308,13 +358,20 @@ const Register = ({
         </div>
 
         {/* Demo Account Info */}
-        <div className="demo-info">
-          <h4>🚀 Quick Demo</h4>
-          <p>Want to try without registering? Use the demo account:</p>
-          <div className="demo-credentials">
-            <strong>Email:</strong> demo@expensetracker.com
-            <br />
-            <strong>Password:</strong> Demo123!
+        <div className="card mt-lg">
+          <div className="card-body">
+            <h4 className="font-semibold mb-sm">Try Demo Account</h4>
+            <p className="text-sm text-muted mb-sm">
+              Want to try without registering? Use the demo account:
+            </p>
+            <div className="bg-light p-sm rounded text-sm">
+              <div>
+                <strong>Email:</strong> demo@expensetracker.com
+              </div>
+              <div>
+                <strong>Password:</strong> Demo123!
+              </div>
+            </div>
           </div>
         </div>
       </div>
